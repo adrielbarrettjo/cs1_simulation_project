@@ -1,7 +1,7 @@
 import runWorld as rw
 import drawWorld as dw
 import pygame as pg
-from random import randint 
+from random import randint
 
 ################################################################
 
@@ -88,11 +88,9 @@ def endState(state):
 def handleEvent(state, event):
     if (event.type == pg.MOUSEBUTTONDOWN):
         print("Handling event: " + str(event))
-        if (state[1]) == 1:
-            newState = -1
-        else:
-            newState = 1
-        return((state[0], newState, state[2], state[3]))
+        newdXState = randint[-5,5]
+        newdYState = randint[-5,5]
+        return((state[0], newdXState, state[2], newdYstate))
     else:
         return(state)
 
@@ -102,9 +100,9 @@ def handleEvent(state, event):
 
 # The cat starts at the left, moving right
 xi = randint(0,499)
-dxi = randint(1,5)
+dxi = randint(1,3)
 yi = randint(0,499)
-dyi = randint(1,5)
+dyi = randint(1,3)
 initState = (xi, dxi, yi, dyi)
 
 # Run the simulation no faster than 60 frames per second
