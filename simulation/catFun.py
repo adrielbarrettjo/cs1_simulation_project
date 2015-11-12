@@ -88,8 +88,8 @@ def endState(state):
 def handleEvent(state, event):
     if (event.type == pg.MOUSEBUTTONDOWN):
         print("Handling event: " + str(event))
-        newdXState = randint[-5,5]
-        newdYState = randint[-5,5]
+        newdXState = randint(-5,5)
+        newdYState = randint(-5,5)
         return((state[0], newdXState, state[2], newdYstate))
     else:
         return(state)
