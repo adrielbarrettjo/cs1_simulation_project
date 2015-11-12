@@ -15,7 +15,7 @@ import pygame as pg
 #
 # For example, the tuple (7,1) would represent the cat at x-coord,
 # 7, and moving to the right by 1 pixel per "clock tick."
-# 
+#
 # The initial state of the cat in this program is (0,1), meaning that the cat
 # starts at the left of the screen and moves right one pixel per tick.
 #
@@ -46,19 +46,18 @@ myimage = dw.loadImage("cat.bmp")
 #
 def updateDisplay(state):
     dw.fill(dw.black)
-    dw.draw(myimage, (state[0], height/2))
+    dw.draw(myimage, (state[0], state[2])) ### state = <x, dx, y, dy>
 
 
 ################################################################
 
 # Change pos by delta-pos, leaving delta-pos unchanged
-# Note that pos is accessed as state[0], and delta-pos
-# as state[1]. Later on we'll see how to access state
-# components by name (as we saw with records in Idris).
+# Note that pos is accessed as state[0], and delta -x pos
+# as state[1].
 #
 # state -> state
 def updateState(state):
-    return((state[0]+state[1],state[1]))
+    return(state[0]+state[1], state[1], state[2]+state[3], state[3])
 
 ################################################################
 
@@ -66,7 +65,7 @@ def updateState(state):
 # that is, when pos is less then zero or greater than the screen width
 # state -> bool
 def endState(state):
-    if (state[0] > width or state[0] < 0):
+    if (state[0] > width or state[0] < 0 or state[2] > height or state[2] < 0):
         return True
     else:
         return False
@@ -85,14 +84,14 @@ def endState(state):
 #
 # state -> event -> state
 #
-def handleEvent(state, event):  
-#    print("Handling event: " + str(event))
+def handleEvent(state, event):
     if (event.type == pg.MOUSEBUTTONDOWN):
+        print("Handling event: " + str(event))
         if (state[1]) == 1:
             newState = -1
         else:
-            newState = 1   
-        return((state[0],newState))
+            newState = 1
+        return((state[0], newState, state[2], state[3]))
     else:
         return(state)
 
@@ -100,8 +99,8 @@ def handleEvent(state, event):
 
 # World state will be single x coordinate at left edge of world
 
-# The cat starts at the left, moving right 
-initState = (0,1)
+# The cat starts at the left, moving right
+initState = (0, 1, 0, 1)
 
 # Run the simulation no faster than 60 frames per second
 frameRate = 60
