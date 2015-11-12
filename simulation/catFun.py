@@ -90,7 +90,7 @@ def handleEvent(state, event):
         print("Handling event: " + str(event))
         newdXState = randint(-5,5)
         newdYState = randint(-5,5)
-        return((state[0], newdXState, state[2], newdYstate))
+        return((state[0], newdXState, state[2], newdYState))
     else:
         return(state)
 
