@@ -19,10 +19,11 @@ runtime = 10
 
 ## Display the state by drawing the image at the current state's (x,y)
 ## pair
-## myimage = dw.loadImage("image.bmp")
-## def updateDisplay(state):
-##     dw.fill(dw.black)
-##     dw.draw(myimage, (state[1], state[2]))
+myimage = dw.loadImage("cat.bmp")
+
+def updateDisplay(state):
+     dw.fill(dw.black)
+     dw.draw(myimage, (s[i][0], s[i][2]))
 
 ################################################################
 
@@ -79,7 +80,7 @@ def updateState(state, m):
     Bin = CumulProb[0,0]
     print("this is Bin:", Bin)
     print("this is p:", prob)
-    for i in  0 range(0, numofs):
+    for i in range(0, numofs):
         if p < Bin:
             print(i)
             state = i
@@ -88,7 +89,7 @@ def updateState(state, m):
         else:
             Bin = Bin + CumulProblP[state, i+1]
             print("This is new Bin", Bin)
-
+    h+=1
 
 ################################################################
 
@@ -101,6 +102,6 @@ def endState(state):
 
 ## Run the simulation/ change state no more than once per second
 frameRate = 1
-
+initState = 0
 ## Run the simulation!
-## rw.runWorld(initState, updateDisplay, updateState, handleEvent, endState, frameRate)
+rw.runWorld(initState, updateDisplay, updateState, handleEvent, endState, frameRate)
