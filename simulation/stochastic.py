@@ -10,7 +10,7 @@ import pygame as pg
 width = 500
 height = 500
 ## rw.newDisplay(width, height, name)
-## number of states 
+## number of states
 numofs = 6
 ## number of times the object walks
 runtime = 10
@@ -41,7 +41,7 @@ while i < numofs:
     m.append(a)
     i += 1
 m = np.matrix(m)
-print("this is m", m)
+print("this is m:", m)
 
 ## Creating the states
 ## States take the form (the state's number, the x coordinate, the y
@@ -54,7 +54,7 @@ while q < numofs:
     state = (sx, sy)
     s.append(state)
     q += 1
-print("this is s",s)
+print("this is s:",s)
 
 ## calling elements of the state's:  s[n][m] n is the state number, starting with 0, m
 ## is the state number if m = 0, the x coordinate if m = 1, the y
@@ -68,31 +68,39 @@ print("this is s",s)
 initState = 0
 
 
-## def updateState(state, m)
-p = np.random.randint(0,100) 
-p = p/100 ##makes p a decimal
-CP = m[state,:]
-Bin = CP[0]
-for i = 0 to numofs:
-    if p < Bin:
-        print(i)
-        return i
-    else:
-        Bin = Bin + CP[i+1]
-        i += 1
+def updateState(state, m):
+    ## to determine which state the dot moves to next,
+    ## create "bins" and then pick one weighted by probabilities
+    ## from the transition matrix
+    prob = np.random.randint(0,100)
+    prob = prob/100 ##makes p a decimal
+    CumulProb = m[state,:]
+    print ('this is CP:', CumulProb)
+    Bin = CumulProb[0,0]
+    print("this is Bin:", Bin)
+    print("this is p:", prob)
+    for i in  0 range(0, numofs):
+        if p < Bin:
+            print(i)
+            state = i
+            return state
+            break
+        else:
+            Bin = Bin + CumulProblP[state, i+1]
+            print("This is new Bin", Bin)
 
 
 ################################################################
 
 ## Terminates the simulation when the animation has run a h times
-## def endState(state):
-##     if h == runtime:
-##         return True
-##     else:
-##         return False
+def endState(state):
+     if h == runtime:
+        return True
+     else:
+        return False
 
-## Run the simulation no faster than 60 frames per second
-frameRate = 60
+## Run the simulation/ change state no more than once per second
+frameRate = 1
 
 ## Run the simulation!
 ## rw.runWorld(initState, updateDisplay, updateState, handleEvent, endState, frameRate)
