@@ -6,10 +6,10 @@ import drawWorld as dw
 import pygame as pg
 
 ## Initialize world
-## name = "RPG: Random Path Generator"
+name = "RPG: Random Path Generator"
 width = 500
 height = 500
-## rw.newDisplay(width, height, name)
+rw.newDisplay(width, height, name)
 ## number of states
 numofs = 6
 ## number of times the object walks
@@ -20,10 +20,6 @@ runtime = 10
 ## Display the state by drawing the image at the current state's (x,y)
 ## pair
 myimage = dw.loadImage("cat.bmp")
-
-def updateDisplay(state):
-     dw.fill(dw.black)
-     dw.draw(myimage, (s[i][0], s[i][2]))
 
 ################################################################
 
@@ -57,6 +53,14 @@ while q < numofs:
     q += 1
 print("this is s:",s)
 
+
+
+i = 0
+def updateDisplay(state):
+     dw.fill(dw.black)
+     dw.draw(myimage, (s[i][0], s[i][1]))
+
+
 ## calling elements of the state's:  s[n][m] n is the state number, starting with 0, m
 ## is the state number if m = 0, the x coordinate if m = 1, the y
 ## coordinate if m = 2 | s[0][1] is the zero'th state's x element
@@ -68,8 +72,8 @@ print("this is s:",s)
 ## according to that comparitive calculation.
 initState = 0
 
-
-def updateState(state, m):
+h = 0
+def updateState(state):
     ## to determine which state the dot moves to next,
     ## create "bins" and then pick one weighted by probabilities
     ## from the transition matrix
@@ -81,13 +85,13 @@ def updateState(state, m):
     print("this is Bin:", Bin)
     print("this is p:", prob)
     for i in range(0, numofs):
-        if p < Bin:
+        if prob < Bin:
             print(i)
             state = i
-            return state
+            return(state)
             break
         else:
-            Bin = Bin + CumulProblP[state, i+1]
+            Bin = Bin + CumulProb[state, i+1]
             print("This is new Bin", Bin)
     h+=1
 
@@ -99,6 +103,8 @@ def endState(state):
         return True
      else:
         return False
+def handleEvent(state, event):
+    return(state)
 
 ## Run the simulation/ change state no more than once per second
 frameRate = 1
