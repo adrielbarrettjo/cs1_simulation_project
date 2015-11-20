@@ -13,8 +13,6 @@ rw.newDisplay(width, height, name)
 ## number of states
 numofs = 6
 ## number of times the object walks
-runtime = 10
-
 ################################################################
 
 ## Display the state by drawing the image at the current state's (x,y)
@@ -54,11 +52,9 @@ while q < numofs:
 print("this is s:",s)
 
 
-
-i = 0
 def updateDisplay(state):
      dw.fill(dw.black)
-     dw.draw(myimage, (s[i][0], s[i][1]))
+     dw.draw(myimage, (s[state][0], s[state][1]))
 
 
 ## calling elements of the state's:  s[n][m] n is the state number, starting with 0, m
@@ -72,11 +68,11 @@ def updateDisplay(state):
 ## according to that comparitive calculation.
 initState = 0
 
-h = 0
 def updateState(state):
     ## to determine which state the dot moves to next,
     ## create "bins" and then pick one weighted by probabilities
     ## from the transition matrix
+
     prob = np.random.randint(0,100)
     prob = prob/100 ##makes p a decimal
     CumulProb = m[state,:]
@@ -84,22 +80,23 @@ def updateState(state):
     Bin = CumulProb[0,0]
     print("this is Bin:", Bin)
     print("this is p:", prob)
-    for i in range(0, numofs):
+    for i in range(0, numofs-1):
         if prob < Bin:
-            print(i)
+            print("this is i", i)
             state = i
-            return(state)
             break
         else:
-            Bin = Bin + CumulProb[state, i+1]
+            print("this is Bin2", Bin)
+            print("this is CP2", CumulProb[0, (i+1)])
+            Bin = Bin + CumulProb[0, (i+1)]
             print("This is new Bin", Bin)
-    h+=1
-
+    end = np.random.randint(0,5)
+    return(state, end)
 ################################################################
 
 ## Terminates the simulation when the animation has run a h times
-def endState(state):
-     if h == runtime:
+def endState(state, end):
+     if end == 3:
         return True
      else:
         return False
