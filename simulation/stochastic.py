@@ -95,7 +95,7 @@ def updateState(state):
 ################################################################
 
 ## Terminates the simulation when the animation has run a h times
-def endState(state, end):
+def endState(state):
      if end == 3:
         return True
      else:
