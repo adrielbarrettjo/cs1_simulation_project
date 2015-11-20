@@ -14,7 +14,7 @@ height = 500
 rw.newDisplay(width, height, name)
 
 
-## 2| Defining the number of states and generating a random 
+## 2| Defining the number of states and generating a random
 ## transition matrix for those states
 
 ## 2.1| Number of States
@@ -78,7 +78,7 @@ def updateState(state):
 ##    print("this is p:", prob)
     for i in range(0, numofs-1):
         if prob < Bin:
-            print("this is i", i)
+            print("The state is:", i)
             state = i
             break
         else:
@@ -93,7 +93,7 @@ def updateState(state):
 ## Display the state by drawing the image at the current state's (x,y)
 ## pair
 
-myimage = dw.loadImage("cat.bmp")
+myimage = dw.loadImage("dog.jpg")
 
 def updateDisplay(state):
      dw.fill(dw.black)
@@ -114,13 +114,13 @@ def endState(state):
 ################################################################
 
 ## A blank handle event for possible extension of the simulation
-    
+
 def handleEvent(state, event):
     return(state)
 
 
 ################################################################
-    
+
 ## Change state no more than once per second
 frameRate = 1
 
