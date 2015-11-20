@@ -6,22 +6,21 @@ import drawWorld as dw
 import pygame as pg
 
 ## Initialize world
+
+## 1| Initializing Display
 name = "RPG: Random Path Generator"
 width = 500
 height = 500
 rw.newDisplay(width, height, name)
-## number of states
-numofs = 6
-## number of times the object walks
-################################################################
 
-## Display the state by drawing the image at the current state's (x,y)
-## pair
-myimage = dw.loadImage("cat.bmp")
 
-################################################################
+## 2| Defining the number of states and generating a random 
+## transition matrix for those states
 
-## generate random 6x6 stochastic matrix
+## 2.1| Number of States
+numofs = 8
+
+## 2.2| Transition Matrix
 i = 0
 m = []
 while i < numofs:
@@ -36,11 +35,11 @@ while i < numofs:
     m.append(a)
     i += 1
 m = np.matrix(m)
-print("this is m:", m)
+## print("this is m:", m)
 
-## Creating the states
-## States take the form (the state's number, the x coordinate, the y
-## coordinate), while s is the array containing all the states
+## 3| Creating the States
+
+## 3.1| States are created in the array s represented by a (x,y) pair
 s = []
 q=0
 while q < numofs:
@@ -49,62 +48,87 @@ while q < numofs:
     state = (sx, sy)
     s.append(state)
     q += 1
-print("this is s:",s)
+## print("this is s:",s)
+
+## 3.2| The following s array is for demonstration purposes, it makes a
+## grid of states instead of random states so that pepole can more
+## easily understand what a state is. Comment this line out to return
+## to randomly generated states. Using this set of states requires
+## numofs = 8
+## s = [(100,166),(200,166),(300,166),(400,166),(100,333),(200,333),(300,333),(400,333)]
 
 
-def updateDisplay(state):
-     dw.fill(dw.black)
-     dw.draw(myimage, (s[state][0], s[state][1]))
+################################################################
 
+## To determine which state the dot moves to next,
+## create "bins" and then pick one weighted by probabilities
+## from the transition matrix
 
-## calling elements of the state's:  s[n][m] n is the state number, starting with 0, m
-## is the state number if m = 0, the x coordinate if m = 1, the y
-## coordinate if m = 2 | s[0][1] is the zero'th state's x element
+## The various print commands are to make sure the program is
+## calculating the probabilities and bins correctly
 
-## Allowing objects to move from state to state
-## A random number is generated between 0
-## and 100, and is compared to the probability matrix's row for the
-## state the object is in, and the object moves to the next state
-## according to that comparitive calculation.
-initState = 0
 
 def updateState(state):
-    ## to determine which state the dot moves to next,
-    ## create "bins" and then pick one weighted by probabilities
-    ## from the transition matrix
-
     prob = np.random.randint(0,100)
     prob = prob/100 ##makes p a decimal
     CumulProb = m[state,:]
-    print ('this is CP:', CumulProb)
     Bin = CumulProb[0,0]
-    print("this is Bin:", Bin)
-    print("this is p:", prob)
+##    print ('this is CP:', CumulProb)
+##    print("this is Bin:", Bin)
+##    print("this is p:", prob)
     for i in range(0, numofs-1):
         if prob < Bin:
             print("this is i", i)
             state = i
             break
         else:
-            print("this is Bin2", Bin)
-            print("this is CP2", CumulProb[0, (i+1)])
+##            print("this is Bin2", Bin)
+##            print("this is CP2", CumulProb[0, (i+1)])
             Bin = Bin + CumulProb[0, (i+1)]
-            print("This is new Bin", Bin)
-    end = np.random.randint(0,5)
-    return(state, end)
+##            print("This is new Bin", Bin)
+    return(state)
+
 ################################################################
 
-## Terminates the simulation when the animation has run a h times
+## Display the state by drawing the image at the current state's (x,y)
+## pair
+
+myimage = dw.loadImage("cat.bmp")
+
+def updateDisplay(state):
+     dw.fill(dw.black)
+     dw.draw(myimage, (s[state][0], s[state][1]))
+
+
+################################################################
+
+## Terminates the simulation when the state is a given number
+
 def endState(state):
-     if end == 3:
+     if state == 4:
         return True
      else:
         return False
+
+
+################################################################
+
+## A blank handle event for possible extension of the simulation
+    
 def handleEvent(state, event):
     return(state)
 
-## Run the simulation/ change state no more than once per second
+
+################################################################
+    
+## Change state no more than once per second
 frameRate = 1
+
+## Starting position is the 0 state
 initState = 0
+
+
+################################################################
+
 ## Run the simulation!
 rw.runWorld(initState, updateDisplay, updateState, handleEvent, endState, frameRate)
