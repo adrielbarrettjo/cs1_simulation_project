@@ -6,13 +6,11 @@ import drawWorld as dw
 import pygame as pg
 
 ## Initialize world
-
 ## 1| Initializing Display
 name = "RPG: Random Path Generator"
 width = 500
 height = 500
 rw.newDisplay(width, height, name)
-
 
 ## 2| Defining the number of states and generating a random
 ## transition matrix for those states
@@ -43,8 +41,8 @@ m = np.matrix(m)
 s = []
 q=0
 while q < numofs:
-    sx = np.random.randint(0, width)
-    sy = np.random.randint(0, height)
+    sx = np.random.randint(0, width/2)
+    sy = np.random.randint(0, height/2)
     state = (sx, sy)
     s.append(state)
     q += 1
@@ -57,9 +55,7 @@ while q < numofs:
 ## numofs = 8
 ## s = [(100,166),(200,166),(300,166),(400,166),(100,333),(200,333),(300,333),(400,333)]
 
-
 ################################################################
-
 ## To determine which state the dot moves to next,
 ## create "bins" and then pick one weighted by probabilities
 ## from the transition matrix
@@ -67,11 +63,10 @@ while q < numofs:
 ## The various print commands are to make sure the program is
 ## calculating the probabilities and bins correctly
 
-
 def updateState(state):
     prob = np.random.randint(0,100)
     prob = prob/100 ##makes p a decimal
-    CumulProb = m[state,:]
+    CumulProb = m[state.position,:]
     Bin = CumulProb[0,0]
 ##    print ('this is CP:', CumulProb)
 ##    print("this is Bin:", Bin)
@@ -79,7 +74,7 @@ def updateState(state):
     for i in range(0, numofs-1):
         if prob < Bin:
             print("The state is:", i)
-            state = i
+            state.position = i
             break
         else:
 ##            print("this is Bin2", Bin)
@@ -89,33 +84,35 @@ def updateState(state):
     return(state)
 
 ################################################################
-
 ## Display the state by drawing the image at the current state's (x,y)
 ## pair
 
 myimage = dw.loadImage("dog.jpg")
+dot = dw.loadImage("white_dot.jpg")
 
 def updateDisplay(state):
-     dw.fill(dw.black)
-     dw.draw(myimage, (s[state][0], s[state][1]))
-
+    d=0
+    dw.fill(dw.black)
+    while d < numofs-1:
+        dw.draw(dot, (s[d][0], s[d][1]))
+        d += 1
+    dw.draw(state.image, (s[state.position][0], s[state.position][1]))
 
 ################################################################
-
 ## Terminates the simulation when the state is a given number
 
 def endState(state):
-     if state == 4:
+    if state.endRun == True:
         return True
-     else:
+    else:
         return False
 
-
 ################################################################
-
 ## A blank handle event for possible extension of the simulation
 
 def handleEvent(state, event):
+    if (event.type == pg.MOUSEBUTTONDOWN):
+        state.endRun = True
     return(state)
 
 
@@ -124,11 +121,13 @@ def handleEvent(state, event):
 ## Change state no more than once per second
 frameRate = 1
 
-## Starting position is the 0 state
-initState = 0
+# set State as a class
+class State:    # think of State as a type
+    position = 0
+    endRun = False
+    image = myimage
 
-
-################################################################
+initState = State() ## Starting position is the 0 state
 
 ## Run the simulation!
 rw.runWorld(initState, updateDisplay, updateState, handleEvent, endState, frameRate)
